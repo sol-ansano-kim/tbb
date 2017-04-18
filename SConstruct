@@ -42,11 +42,10 @@ def TBBProxyPath():
    return excons.OutputBaseDirectory() + "/lib/" + libname 
 
 def RequireTBB(env):
+   if tbb_static:
+      env.Append(CPPDEFINES=["TBB_STATIC"])
    env.Append(CPPPATH=[excons.OutputBaseDirectory() + "/include"])
    excons.Link(env, TBBPath(), static=tbb_static, force=True, silent=True)
-   if tbb_static:
-      dl.Require(env)
-
 
 
 
@@ -54,7 +53,7 @@ cmake_opts = {"TBB_BUILD_SHARED": (0 if tbb_static else 1),
               "TBB_BUILD_STATIC": (1 if tbb_static else 0),
               "TBB_BUILD_TBBMALLOC": 1,
               "TBB_BUILD_TBBMALLOC_PROXY": 1,
-              "TBB_BUILD_TESTS": 0}
+              "TBB_BUILD_TESTS": excons.GetArgument("tbb-tests", 0, int)}
 
 cmake_srcs = excons.CollectFiles(["src/tbb", "src/tbbmalloc", "src/tbbproxy", "src/rml", "src/perf"],
                                  patterns=["*.cpp", "*.def", "*.asm"], recursive=True)
@@ -66,6 +65,10 @@ tbb = {"name": "tbb",
        "cmake-srcs": cmake_srcs,
        "cmake-outputs": [TBBPath(), TBBMallocPath(), TBBProxyPath()] +
                         map(lambda x: "include/tbb/%s" % os.path.basename(x), excons.glob("include/tbb/*.h"))}
+
+excons.AddHelpOptions(tbb="""TBB OPTIONS
+  tbb-static=0|1 : Toggle between static and shared version of the libraries. [1]
+  tbb-tests=0|1  : Compile TBB tests. [0]""")
 
 excons.DeclareTargets(env, [tbb])
 
