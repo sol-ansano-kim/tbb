@@ -1,6 +1,7 @@
 import os
 import sys
 import excons
+import excons.tools.dl as dl
 
 env = excons.MakeBaseEnv()
 
@@ -41,11 +42,10 @@ def TBBProxyPath():
    return excons.OutputBaseDirectory() + "/lib/" + libname 
 
 def RequireTBB(env):
-   if tbb_static:
-      # HUM?
-      pass
    env.Append(CPPPATH=[excons.OutputBaseDirectory() + "/include"])
    excons.Link(env, TBBPath(), static=tbb_static, force=True, silent=True)
+   if tbb_static:
+      dl.Require(env)
 
 
 
