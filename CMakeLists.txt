@@ -345,7 +345,6 @@ if (TBB_BUILD_STATIC)
   SET_TARGET_INCLUDE_DIR(tbb_static)
   install(TARGETS tbb_static EXPORT tbbTargets
     ARCHIVE DESTINATION lib
-    INCLUDES DESTINATION include
   )
 endif()
 
