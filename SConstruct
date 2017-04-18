@@ -64,7 +64,7 @@ tbb = {"name": "tbb",
        "cmake-opts": cmake_opts,
        "cmake-cfgs": ["CMakeLists.txt"],
        "cmake-srcs": cmake_srcs,
-       "cmake-outputs": [TBBName(), TBBMallocName(), TBBProxyName()] +
+       "cmake-outputs": [TBBPath(), TBBMallocPath(), TBBProxyPath()] +
                         map(lambda x: "include/tbb/%s" % os.path.basename(x), excons.glob("include/tbb/*.h"))}
 
 excons.DeclareTargets(env, [tbb])
