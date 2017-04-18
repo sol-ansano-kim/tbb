@@ -336,7 +336,10 @@ if (TBB_BUILD_STATIC)
   set_property(TARGET tbb_static APPEND PROPERTY COMPILE_DEFINITIONS "__TBB_BUILD=1")
   set_property(TARGET tbb_static APPEND_STRING PROPERTY COMPILE_FLAGS ${ENABLE_RTTI})
   SET_TARGET_INCLUDE_DIR(tbb_static)
-  install(TARGETS tbb_static ARCHIVE DESTINATION lib)
+  install(TARGETS tbb_static EXPORT tbbTargets
+    ARCHIVE DESTINATION lib
+    INCLUDES DESTINATION include
+  )
 endif()
 
 if (TBB_BUILD_SHARED)
