@@ -307,10 +307,17 @@ macro(SET_SHARED_LIB_VERSION_PROPERTIES shdlibname extern_def_filename TBB_COMPI
 
   if (APPLE)
     set_property(TARGET ${shdlibname} APPEND PROPERTY LINK_FLAGS "-Wl,-exported_symbols_list,${CMAKE_CURRENT_BINARY_DIR}/${extern_def_filename}")
+    set_target_properties(${shdlibname} PROPERTIES BUILD_WITH_INSTALL_RPATH OFF)
+    set_target_properties(${shdlibname} PROPERTIES INSTALL_RPATH_USE_LINK_PATH OFF)
+    set_target_properties(${shdlibname} PROPERTIES MACOSX_RPATH ON)
+    set_target_properties(${shdlibname} PROPERTIES INSTALL_RPATH "@loader_path")
   elseif (MSVC)
     set_property(TARGET ${shdlibname} APPEND PROPERTY LINK_FLAGS "/DEF:${CMAKE_CURRENT_BINARY_DIR}/${extern_def_filename}")
   else ()
     set_property(TARGET ${shdlibname} APPEND PROPERTY LINK_FLAGS "-Wl,-version-script,${CMAKE_CURRENT_BINARY_DIR}/${extern_def_filename}")
+    set_target_properties(${shdlibname} PROPERTIES BUILD_WITH_INSTALL_RPATH OFF)
+    set_target_properties(${shdlibname} PROPERTIES INSTALL_RPATH_USE_LINK_PATH OFF)
+    set_target_properties(${shdlibname} PROPERTIES INSTALL_RPATH "$ORIGIN")
   endif()
   SET_TARGET_INCLUDE_DIR(${shdlibname})
 
