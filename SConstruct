@@ -45,7 +45,7 @@ def RequireTBB(env):
       # HUM?
       pass
    env.Append(CPPPATH=[excons.OutputBaseDirectory() + "/include"])
-   env.Append(LIBS=[TBBPath()])
+   excons.Link(env, TBBPath(), static=tbb_static, force=True, silent=True)
 
 
 
