@@ -41,7 +41,7 @@ def TBBProxyPath():
    return excons.OutputBaseDirectory() + "/lib/" + libname 
 
 def RequireTBB(env):
-   if static:
+   if tbb_static:
       # HUM?
       pass
    env.Append(CPPPATH=[excons.OutputBaseDirectory() + "/include"])
