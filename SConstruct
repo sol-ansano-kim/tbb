@@ -2,6 +2,8 @@ import os
 import sys
 import excons
 import excons.tools.dl as dl
+import excons.tools.threads as threads
+
 
 env = excons.MakeBaseEnv()
 
@@ -46,6 +48,13 @@ def RequireTBB(env):
       env.Append(CPPDEFINES=["TBB_STATIC"])
    env.Append(CPPPATH=[excons.OutputBaseDirectory() + "/include"])
    excons.Link(env, TBBPath(), static=tbb_static, force=True, silent=True)
+   if not tbb_static:
+      # Shared library version of tbb has dynamic loading on by default
+      # On *nix systems, link dl in
+      dl.Require(env)
+   else:
+      # On *nix systems, link pthread in
+      threads.Require(env)
 
 
 
