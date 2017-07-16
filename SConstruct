@@ -8,6 +8,7 @@ import excons.tools.threads as threads
 env = excons.MakeBaseEnv()
 
 
+cxx11 = (excons.GetArgument("use-c++11", 0, int) != 0)
 tbb_static = (excons.GetArgument("tbb-static", 1, int) != 0)
 
 def TBBName():
@@ -58,7 +59,8 @@ def RequireTBB(env):
 
 
 
-cmake_opts = {"TBB_BUILD_SHARED": (0 if tbb_static else 1),
+cmake_opts = {"CMAKE_CXX_STANDARD": ("98" if not cxx11 else "11"),
+              "TBB_BUILD_SHARED": (0 if tbb_static else 1),
               "TBB_BUILD_STATIC": (1 if tbb_static else 0),
               "TBB_BUILD_TBBMALLOC": 1,
               "TBB_BUILD_TBBMALLOC_PROXY": 1,
