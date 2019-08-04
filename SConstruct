@@ -7,12 +7,13 @@ import excons.tools.threads as threads
 
 env = excons.MakeBaseEnv()
 
-
 cxx11 = (excons.GetArgument("use-c++11", 0, int) != 0)
 tbb_static = (excons.GetArgument("tbb-static", 1, int) != 0)
+tbb_static_suffix = excons.GetArgument("tbb-static-suffix", "_static", str)
+
 
 def TBBName():
-   return "tbb" + ("_static" if tbb_static else "")
+   return "tbb" + (tbb_static_suffix if tbb_static else "")
 
 def TBBPath():
    name = TBBName()
@@ -23,7 +24,7 @@ def TBBPath():
    return excons.OutputBaseDirectory() + "/lib/" + libname 
 
 def TBBMallocName():
-   return "tbbmalloc" + ("_static" if tbb_static else "")
+   return "tbbmalloc" + (tbb_static_suffix if tbb_static else "")
 
 def TBBMallocPath():
    name = TBBMallocName()
@@ -34,7 +35,7 @@ def TBBMallocPath():
    return excons.OutputBaseDirectory() + "/lib/" + libname 
 
 def TBBProxyName():
-   return "tbbmalloc_proxy" + ("_static" if tbb_static else "")
+   return "tbbmalloc_proxy" + (tbb_static_suffix if tbb_static else "")
 
 def TBBProxyPath():
    name = TBBProxyName()
@@ -64,6 +65,7 @@ cmake_opts = {"CMAKE_CXX_STANDARD": ("98" if not cxx11 else "11"),
               "TBB_BUILD_STATIC": (1 if tbb_static else 0),
               "TBB_BUILD_TBBMALLOC": 1,
               "TBB_BUILD_TBBMALLOC_PROXY": 1,
+              "TBB_BUILD_STATIC_SUFFIX": tbb_static_suffix,
               "TBB_BUILD_TESTS": excons.GetArgument("tbb-tests", 0, int)}
 
 cmake_srcs = excons.CollectFiles(["src/tbb", "src/tbbmalloc", "src/tbbproxy", "src/rml", "src/perf"],
